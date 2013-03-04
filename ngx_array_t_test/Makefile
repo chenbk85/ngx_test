@@ -1,12 +1,12 @@
 CXX = gcc
 CXXFLAGS +=-g -Wall -Wextra
  
-NGX_ROOT =/usr/src/nginx-1.0.4
+NGX_ROOT =/root/tar/nginx-1.2.6
  
 TARGETS =ngx_array_t_test
 TARGETS_C_FILE= $(TARGETS).c
  
-CLEANUP = rm-f $(TARGETS) *.o
+CLEANUP = rm -f $(TARGETS) *.o
  
 all:$(TARGETS)
  
@@ -26,4 +26,4 @@ NGX_ALLOC =$(NGX_ROOT)/objs/src/os/unix/ngx_alloc.o
 NGX_ARRAY =$(NGX_ROOT)/objs/src/core/ngx_array.o
  
 $(TARGETS):$(TARGETS_C_FILE)
-	$(CXX) $(CXXFLAGS) $(CORE_INCS) $(NGX_PALLOC) $(NGX_STRING)$(NGX_ALLOC) $(NGX_ARRAY) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(CORE_INCS) $(NGX_PALLOC) $(NGX_STRING) $(NGX_ALLOC) $(NGX_ARRAY) $^ -o $@
