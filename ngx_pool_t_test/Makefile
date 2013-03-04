@@ -11,7 +11,7 @@ CLEANUP = rm -f $(TARGETS) *.o
 all: $(TARGETS)
 
 clean:
-	$(CLEANUP)
+	$(CLEANUP) $(TARGETS)
 
 CORE_INCS = -I. \
 	-I$(NGX_ROOT)/src/core \

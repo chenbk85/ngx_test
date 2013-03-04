@@ -1,5 +1,5 @@
 /**
- * ngx_pool_t test, to test ngx_palloc, ngx_palloc_block, ngx_palloc_large
+ * ngx_array_t test, to test ngx_array_create, ngx_array_push
  */
 
 #include <stdio.h>
@@ -9,6 +9,7 @@
 #include "ngx_core.h"
 #include "ngx_string.h"
 #include "ngx_palloc.h"
+#include "ngx_array.h"
 
 volatile ngx_cycle_t  *ngx_cycle;
 
@@ -38,9 +39,31 @@ void dump_pool(ngx_pool_t* pool)
     }
 }
 
+void dump_array(ngx_array_t* a)
+{
+    if (a)
+    {
+        printf("array = 0x%x\n", a);
+        printf("  .elts = 0x%x\n", a->elts);
+        printf("  .nelts = %d\n", a->nelts);
+        printf("  .size = %d\n", a->size);
+        printf("  .nalloc = %d\n", a->nalloc);
+        printf("  .pool = 0x%x\n", a->pool);
+
+        printf("elements: ");
+        int *ptr = (int*)(a->elts);
+        for (; ptr < (int*)(a->elts + a->nalloc * a->size); )
+        {
+            printf("0x%x  ", *ptr++);
+        }
+        printf("\n");
+    }
+}
+
 int main()
 {
     ngx_pool_t *pool;
+    int i;
 
     printf("--------------------------------\n");
     printf("create a new pool:\n");
@@ -49,23 +72,20 @@ int main()
     dump_pool(pool);
 
     printf("--------------------------------\n");
-    printf("alloc block 1 from the pool:\n");
+    printf("alloc an array from the pool:\n");
     printf("--------------------------------\n");
-    ngx_palloc(pool, 512);
+    ngx_array_t *a = ngx_array_create(pool, 10, sizeof(int));
     dump_pool(pool);
 
-    printf("--------------------------------\n");
-    printf("alloc block 2 from the pool:\n");
-    printf("--------------------------------\n");
-    ngx_palloc(pool, 512);
-    dump_pool(pool);
+    for (i = 0; i < 10; i++)
+    {
+        int *ptr = ngx_array_push(a);
+        *ptr = i + 1;
+    }
 
-    printf("--------------------------------\n");
-    printf("alloc block 3 from the pool :\n");
-    printf("--------------------------------\n");
-    ngx_palloc(pool, 1024);
-    dump_pool(pool);
+    dump_array(a);
 
+    ngx_array_destroy(a);
     ngx_destroy_pool(pool);
     return 0;
 }
