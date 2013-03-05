@@ -117,7 +117,7 @@ int main()
     printf("--------------------------------\n");
     printf("alloc a queue head and nodes :\n");
     printf("--------------------------------\n");
-    myque = ngx_palloc(pool, sizeof(ngx_queue_t));  //alloc a queue head
+    myque =ngx_palloc(pool, sizeof(ngx_queue_t));  //alloc a queue head
     ngx_queue_init(myque);  //init the queue
  
     //insert  some points into the queue
